@@ -1,6 +1,6 @@
 export interface Movie {
   title: string;
-  description: string | undefined;
+  description?: string;
   imgUrl: string;
   imdbUrl: string;
   imdbId: string;

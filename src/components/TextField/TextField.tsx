@@ -32,7 +32,7 @@ export const TextField: React.FC<Props> = ({
   const [touched, setTouched] = useState(false);
   let textOfError = '';
 
-  if (name === 'imdbUrl' || name === 'imgUrl') {
+  if ((name === 'imdbUrl' || name === 'imgUrl') && value) {
     if (!pattern.test(value) && touched) {
       textOfError = `${name} has invalid format`;
     }

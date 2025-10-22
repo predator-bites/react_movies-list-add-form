@@ -36,7 +36,7 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
 
   const handleTitleChange = (value: string) => {
     setTitle(value);
-    handleIsDisabled(value, imgUrl, imdbUrl, imdbId);
+    handleIsDisabled(value.trim(), imgUrl, imdbUrl, imdbId);
   };
 
   const handleDescChange = (value: string) => {
@@ -64,18 +64,26 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
     setImgUrl('');
     setImdbUrl('');
     setImdbId('');
+
+    setIsDisabled(true);
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    onAdd({
+    const newMovieObject: Movie = {
       title: title,
       description: description,
       imgUrl: imgUrl,
       imdbUrl: imdbUrl,
       imdbId: imdbId,
-    });
+    };
+
+    if (!description.trim()) {
+      delete newMovieObject.description;
+    }
+
+    onAdd(newMovieObject);
 
     clearForm();
 
