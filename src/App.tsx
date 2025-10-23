@@ -7,8 +7,9 @@ import { Movie } from './types/Movie';
 
 export const App = () => {
   const [moviesList, setMoviesList] = useState<Movie[]>(moviesFromServer);
+
   const addMovie = (movie: Movie) => {
-    setMoviesList([...moviesList, movie]);
+    setMoviesList(currentMovies => [...currentMovies, movie]);
   };
 
   return (

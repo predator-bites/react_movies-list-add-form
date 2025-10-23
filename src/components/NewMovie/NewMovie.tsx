@@ -17,13 +17,23 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   const [imdbId, setImdbId] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
 
-  function handleIsDisabled(
-    titleText: string,
-    imgUrlText: string,
-    imdbUrlText: string,
-    imdbIdText: string,
-  ) {
-    if (!titleText || !imgUrlText || !imdbUrlText || !imdbIdText) {
+  const newMovieObject: Movie = {
+    title: title,
+    description: description,
+    imgUrl: imgUrl,
+    imdbUrl: imdbUrl,
+    imdbId: imdbId,
+  };
+
+  function handleIsDisabled(newValue: string, key: keyof Movie) {
+    newMovieObject[key] = newValue;
+
+    if (
+      !newMovieObject.title.trim() ||
+      !newMovieObject.imgUrl.trim() ||
+      !newMovieObject.imdbUrl.trim() ||
+      !newMovieObject.imdbId.trim()
+    ) {
       setIsDisabled(true);
 
       return;
@@ -36,26 +46,27 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
 
   const handleTitleChange = (value: string) => {
     setTitle(value);
-    handleIsDisabled(value.trim(), imgUrl, imdbUrl, imdbId);
+    handleIsDisabled(value, 'title');
   };
 
   const handleDescChange = (value: string) => {
     setDescription(value);
+    handleIsDisabled(value, 'description');
   };
 
   const handleImgUrlChange = (value: string) => {
     setImgUrl(value);
-    handleIsDisabled(title, value.trim(), imdbUrl, imdbId);
+    handleIsDisabled(value, 'imgUrl');
   };
 
   const handleImdbUrlChange = (value: string) => {
     setImdbUrl(value);
-    handleIsDisabled(title, imgUrl, value.trim(), imdbId);
+    handleIsDisabled(value, 'imdbUrl');
   };
 
   const handleImdbIdChange = (value: string) => {
     setImdbId(value);
-    handleIsDisabled(title, imgUrl, imdbUrl, value.trim());
+    handleIsDisabled(value, 'imdbId');
   };
 
   function clearForm() {
@@ -71,15 +82,10 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const newMovieObject: Movie = {
-      title: title,
-      description: description,
-      imgUrl: imgUrl,
-      imdbUrl: imdbUrl,
-      imdbId: imdbId,
-    };
-
-    if (!description.trim()) {
+    if (
+      typeof newMovieObject.description !== 'undefined' &&
+      !newMovieObject.description.trim()
+    ) {
       delete newMovieObject.description;
     }
 
@@ -91,7 +97,13 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   }
 
   return (
-    <form className="NewMovie" key={count} id="form" onSubmit={handleSubmit}>
+    <form
+      className="NewMovie"
+      key={count}
+      id="form"
+      onSubmit={handleSubmit}
+      // onChange={handleIsDisabled}
+    >
       <h2 className="title">Add a movie</h2>
 
       <TextField
